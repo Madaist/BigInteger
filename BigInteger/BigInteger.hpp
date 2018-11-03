@@ -38,50 +38,50 @@ public:
 
     friend BigInteger operator+(const BigInteger& ob, int a);
     friend BigInteger operator+(int a, const BigInteger& ob);
-    friend BigInteger operator+(const BigInteger& ob1, const BigInteger& ob2);//done
+    friend BigInteger operator+(const BigInteger& ob1, const BigInteger& ob2);
 
-    friend BigInteger operator-(const BigInteger& ob, int a);//done
-    friend BigInteger operator-(int a, const BigInteger& ob);//done
-    friend BigInteger operator-(const BigInteger& ob1, const BigInteger& ob2);//done
+    friend BigInteger operator-(const BigInteger& ob, int a);
+    friend BigInteger operator-(int a, const BigInteger& ob);
+    friend BigInteger operator-(const BigInteger& ob1, const BigInteger& ob2);
 
-    friend BigInteger operator*(const BigInteger& ob, int a); //done
-    friend BigInteger operator*(int a, const BigInteger& ob); //done
-    friend BigInteger operator*(const BigInteger& ob1, const BigInteger& ob2); //done
+    friend BigInteger operator*(const BigInteger& ob, int a);
+    friend BigInteger operator*(int a, const BigInteger& ob);
+    friend BigInteger operator*(const BigInteger& ob1, const BigInteger& ob2);
 
-    friend BigInteger operator/(const BigInteger& ob, int a); //done
-    friend BigInteger operator/(int a, const BigInteger& ob); //done
+    friend BigInteger operator/(const BigInteger& ob, int a);
+    friend BigInteger operator/(int a, const BigInteger& ob);
     friend BigInteger operator/(const BigInteger& ob1, const BigInteger& ob2);
 
-    friend BigInteger operator^(const BigInteger& ob, int a); //done
+    friend BigInteger operator^(const BigInteger& ob, int a);
 
     friend BigInteger operator%(const BigInteger& ob1, const BigInteger& ob2);
     friend BigInteger operator%(const BigInteger& ob, int a);
     friend BigInteger operator%(int a, BigInteger ob);
 
-    friend bool operator==(const BigInteger& ob1, const BigInteger& ob2); //done
-    friend bool operator==(const BigInteger& ob, int a); //done
-    friend bool operator==(int a, const BigInteger& ob); //done
+    friend bool operator==(const BigInteger& ob1, const BigInteger& ob2);
+    friend bool operator==(const BigInteger& ob, int a);
+    friend bool operator==(int a, const BigInteger& ob);
 
-    friend bool operator!=(const BigInteger& ob1, const BigInteger& ob2); //done
-    friend bool operator!=(const BigInteger& ob, int a); //done
-    friend bool operator!=(int a, const BigInteger& ob); //done
+    friend bool operator!=(const BigInteger& ob1, const BigInteger& ob2);
+    friend bool operator!=(const BigInteger& ob, int a);
+    friend bool operator!=(int a, const BigInteger& ob);
 
-    friend bool operator<(const BigInteger& ob1, const BigInteger& ob2); //done
-    friend bool operator<(const BigInteger& ob, int a); //done
-    friend bool operator<(int a, const BigInteger& ob); //done
+    friend bool operator<(const BigInteger& ob1, const BigInteger& ob2);
+    friend bool operator<(const BigInteger& ob, int a);
+    friend bool operator<(int a, const BigInteger& ob);
 
-    friend bool operator<=(const BigInteger& ob1, const BigInteger& ob2); //done
-    friend bool operator<=(const BigInteger& ob, int a); //done
-    friend bool operator<=(int a, const BigInteger& ob); //done
+    friend bool operator<=(const BigInteger& ob1, const BigInteger& ob2);
+    friend bool operator<=(const BigInteger& ob, int a);
+    friend bool operator<=(int a, const BigInteger& ob);
 
-    friend bool operator>(const BigInteger& ob1, const BigInteger& ob2); //done
-    friend bool operator>(const BigInteger& ob, int a); //done
-    friend bool operator>(int a, const BigInteger& ob); //done
+    friend bool operator>(const BigInteger& ob1, const BigInteger& ob2);
+    friend bool operator>(const BigInteger& ob, int a);
+    friend bool operator>(int a, const BigInteger& ob);
 
-    friend bool operator>=(const BigInteger& ob1, const BigInteger& ob2); //done
-    friend bool operator>=(const BigInteger& ob, int a); //done
-    friend bool operator>=(int a, const BigInteger& ob); //done
-    friend BigInteger min(const BigInteger& a, const BigInteger& b); //done
+    friend bool operator>=(const BigInteger& ob1, const BigInteger& ob2);
+    friend bool operator>=(const BigInteger& ob, int a);
+    friend bool operator>=(int a, const BigInteger& ob);
+    friend BigInteger min(const BigInteger& a, const BigInteger& b);
 
 private:
     std::vector<unsigned char> m_digit;
