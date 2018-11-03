@@ -10,31 +10,15 @@
 BigInteger::BigInteger(std::string digits, unsigned char base)
     : m_base(base)
 {
-    try
-    {
-        if(digits[0] == '-') m_sign = '-';
-        else if(digits[0] == '+')  m_sign = '+';
-        else throw std::runtime_error
-            ("Prima pozitie a string-ului trebuie sa fie reprezentata de semn (+ sau -).");
-    }
-    catch(std::runtime_error& e)
-    {
-        std::cout<<e.what();
-        exit(0);
-    }
+    if(digits[0] == '-') m_sign = '-';
+    else if(digits[0] == '+')  m_sign = '+';
+    else throw std::runtime_error
+        ("Prima pozitie a string-ului trebuie sa fie reprezentata de semn (+ sau -).");
 
     for(int i = digits.length()-1; i >= 1; i--)
     {
-        try
-        {
-            if(strchr("0123456789", digits[i])==NULL)
-                throw std::runtime_error("String-ul nu reprezinta un numar");
-        }
-        catch(std::runtime_error& e)
-        {
-            std::cout<<e.what();
-            exit(0);
-        }
+        if(strchr("0123456789", digits[i])==NULL)
+            throw std::runtime_error("String-ul nu reprezinta un numar");
         m_digit.push_back(digits[i]);
     }
 }
@@ -81,16 +65,8 @@ unsigned char BigInteger::get_sign() const
 
 BigInteger& BigInteger::operator+=(const BigInteger& ob)
 {
-    try
-    {
-        if(m_base != ob.m_base)
-            throw std::runtime_error("Numerele sunt in baze diferite. Nu se pot face operatii.");
-    }
-    catch(std::runtime_error& e)
-    {
-        std::cout<<e.what();
-        exit(0);
-    }
+    if(m_base != ob.m_base)
+        throw std::runtime_error("Numerele sunt in baze diferite. Nu se pot face operatii.");
 
     int carry = 0, sum, i;
     BigInteger min_number = min(*this, ob);
@@ -249,16 +225,8 @@ BigInteger& BigInteger::operator*=(int a)
 
 BigInteger& BigInteger::operator/=(int a)
 {
-    try
-    {
-        if(a == 0)
-            throw std::runtime_error("Impartire la 0.");
-    }
-    catch(std::runtime_error& e)
-    {
-        std::cout<<e.what();
-        exit(0);
-    }
+    if(a == 0)
+        throw std::runtime_error("Impartire la 0.");
 
     int divisor = a;
     BigInteger big_a;
@@ -394,16 +362,9 @@ BigInteger operator/(int a, const BigInteger& ob)
     int ok = 0;
     for (auto i = ob.m_digit.rbegin(); i != ob.m_digit.rend(); ++i)
         if(*i != '0') ok = 1;
-    try
-    {
-        if(ok == 0)
-            throw std::runtime_error("Impartire la 0.");
-    }
-    catch(std::runtime_error& error)
-    {
-        std::cout<<error.what();
-        exit(0);
-    }
+
+    if(ok == 0)
+        throw std::runtime_error("Impartire la 0.");
 
     int b = a;
     unsigned int counter = 0;
@@ -701,31 +662,16 @@ std::istream& operator>>(std::istream& stream, BigInteger& ob)
     std::cout << "\nCitire cifra cu cifra pana la aparitia caracterului 'x'.\n";
     std::cout << "Introduceti semnul numarului (+ sau -): ";
     stream >> ob.m_sign;
-    try
-    {
-        if(strchr("+-", ob.m_sign)==NULL)
-            throw std::runtime_error("Nu ati introdus un semn valid.");
-    }
-    catch(std::runtime_error& e)
-    {
-        std::cout<<e.what();
-        exit(0);
-    }
+    if(strchr("+-", ob.m_sign)==NULL)
+        throw std::runtime_error("Nu ati introdus un semn valid.");
+
     std::cout << "Introduceti cifrele. Prima cifra introdusa va fi cea a unitatilor:\n";
     char a;
     stream >> a;
     while(a != 'x' && a!= 'X')
     {
-        try
-        {
-            if(strchr("0123456789xX", a)==NULL)
-                throw std::runtime_error("Nu ati introdus o cifra valida.");
-        }
-        catch(std::runtime_error& e)
-        {
-            std::cout<<e.what();
-            exit(0);
-        }
+        if(strchr("0123456789xX", a)==NULL)
+            throw std::runtime_error("Nu ati introdus o cifra valida.");
         ob.m_digit.push_back(a);
         stream >> a;
     }
