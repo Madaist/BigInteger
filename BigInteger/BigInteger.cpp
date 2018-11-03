@@ -79,7 +79,7 @@ unsigned char BigInteger::get_sign() const
     return m_sign;
 }
 
-BigInteger BigInteger::operator+=(const BigInteger& ob)
+BigInteger& BigInteger::operator+=(const BigInteger& ob)
 {
     try
     {
@@ -153,7 +153,7 @@ BigInteger BigInteger::operator+=(const BigInteger& ob)
     return *this;
 }
 
-BigInteger BigInteger::operator+=(int a)
+BigInteger& BigInteger::operator+=(int a)
 {
     BigInteger temp;
     temp.m_digit.clear();
@@ -171,19 +171,19 @@ BigInteger BigInteger::operator+=(int a)
     return *this;
 }
 
-BigInteger BigInteger::operator-=(const BigInteger& ob)
+BigInteger& BigInteger::operator-=(const BigInteger& ob)
 {
     *this += (-ob);
     return *this;
 }
 
-BigInteger BigInteger::operator-=(int a)
+BigInteger& BigInteger::operator-=(int a)
 {
     *this += (-a);
     return *this;
 }
 
-BigInteger BigInteger::operator*=(const BigInteger& ob)
+BigInteger& BigInteger::operator*=(const BigInteger& ob)
 {
     if(m_sign == ob.m_sign) m_sign = '+';
     else m_sign = '-';
@@ -229,7 +229,7 @@ BigInteger BigInteger::operator*=(const BigInteger& ob)
     return *this;
 }
 
-BigInteger BigInteger::operator*=(int a)
+BigInteger& BigInteger::operator*=(int a)
 {
     BigInteger temp;
     temp.m_digit.clear();
@@ -247,7 +247,7 @@ BigInteger BigInteger::operator*=(int a)
     return *this;
 }
 
-BigInteger BigInteger::operator/=(int a)
+BigInteger& BigInteger::operator/=(int a)
 {
     try
     {

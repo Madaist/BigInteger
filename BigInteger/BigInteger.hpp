@@ -15,20 +15,20 @@ public:
     unsigned char get_base() const;
     unsigned char get_sign() const;
 
-    BigInteger operator+=(const BigInteger& ob);
-    BigInteger operator+=(int a);
+    BigInteger& operator+=(const BigInteger& ob);
+    BigInteger& operator+=(int a);
 
-    BigInteger operator-=(const BigInteger& ob);
-    BigInteger operator-=(int a);
+    BigInteger& operator-=(const BigInteger& ob);
+    BigInteger& operator-=(int a);
 
-    BigInteger operator*=(const BigInteger& ob);
-    BigInteger operator*=(int a);
+    BigInteger& operator*=(const BigInteger& ob);
+    BigInteger& operator*=(int a);
 
-    BigInteger operator/=(BigInteger ob);
-    BigInteger operator/=(int a);
+    BigInteger& operator/=(BigInteger ob);
+    BigInteger& operator/=(int a);
 
-    BigInteger operator%=(BigInteger ob);
-    BigInteger operator%=(int a);
+    BigInteger& operator%=(BigInteger ob);
+    BigInteger& operator%=(int a);
 
     friend std::istream& operator>>(std::istream& stream, BigInteger& ob);
     friend std::ostream& operator<<(std::ostream& stream, BigInteger& ob);
