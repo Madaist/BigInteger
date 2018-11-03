@@ -1,0 +1,93 @@
+#ifndef BIGINTEGER_HPP_INCLUDED
+#define BIGINTEGER_HPP_INCLUDED
+#include <iostream>
+#include<vector>
+#include<string>
+#include<stdexcept>
+
+class BigInteger
+{
+public:
+    BigInteger(std::string digits, unsigned char base = 10);
+    BigInteger(int number = 0, unsigned char base = 10);
+    BigInteger(long long int number, unsigned char base = 10);
+
+    unsigned char get_base() const;
+    unsigned char get_sign() const;
+
+    BigInteger operator+=(const BigInteger& ob);
+    BigInteger operator+=(int a);
+
+    BigInteger operator-=(const BigInteger& ob);
+    BigInteger operator-=(int a);
+
+    BigInteger operator*=(const BigInteger& ob);
+    BigInteger operator*=(int a);
+
+    BigInteger operator/=(BigInteger ob);
+    BigInteger operator/=(int a);
+
+    BigInteger operator%=(BigInteger ob);
+    BigInteger operator%=(int a);
+
+    friend std::istream& operator>>(std::istream& stream, BigInteger& ob);
+    friend std::ostream& operator<<(std::ostream& stream, BigInteger& ob);
+
+    friend BigInteger operator+(const BigInteger& ob);
+    friend BigInteger operator-(BigInteger ob);
+
+    friend BigInteger operator+(const BigInteger& ob, int a);
+    friend BigInteger operator+(int a, const BigInteger& ob);
+    friend BigInteger operator+(const BigInteger& ob1, const BigInteger& ob2);//done
+
+    friend BigInteger operator-(const BigInteger& ob, int a);//done
+    friend BigInteger operator-(int a, const BigInteger& ob);//done
+    friend BigInteger operator-(const BigInteger& ob1, const BigInteger& ob2);//done
+
+    friend BigInteger operator*(const BigInteger& ob, int a); //done
+    friend BigInteger operator*(int a, const BigInteger& ob); //done
+    friend BigInteger operator*(const BigInteger& ob1, const BigInteger& ob2); //done
+
+    friend BigInteger operator/(const BigInteger& ob, int a); //done
+    friend BigInteger operator/(int a, const BigInteger& ob); //done
+    friend BigInteger operator/(const BigInteger& ob1, const BigInteger& ob2);
+
+    friend BigInteger operator^(const BigInteger& ob, int a); //done
+
+    friend BigInteger operator%(const BigInteger& ob1, const BigInteger& ob2);
+    friend BigInteger operator%(const BigInteger& ob, int a);
+    friend BigInteger operator%(int a, BigInteger ob);
+
+    friend bool operator==(const BigInteger& ob1, const BigInteger& ob2); //done
+    friend bool operator==(const BigInteger& ob, int a); //done
+    friend bool operator==(int a, const BigInteger& ob); //done
+
+    friend bool operator!=(const BigInteger& ob1, const BigInteger& ob2); //done
+    friend bool operator!=(const BigInteger& ob, int a); //done
+    friend bool operator!=(int a, const BigInteger& ob); //done
+
+    friend bool operator<(const BigInteger& ob1, const BigInteger& ob2); //done
+    friend bool operator<(const BigInteger& ob, int a); //done
+    friend bool operator<(int a, const BigInteger& ob); //done
+
+    friend bool operator<=(const BigInteger& ob1, const BigInteger& ob2); //done
+    friend bool operator<=(const BigInteger& ob, int a); //done
+    friend bool operator<=(int a, const BigInteger& ob); //done
+
+    friend bool operator>(const BigInteger& ob1, const BigInteger& ob2); //done
+    friend bool operator>(const BigInteger& ob, int a); //done
+    friend bool operator>(int a, const BigInteger& ob); //done
+
+    friend bool operator>=(const BigInteger& ob1, const BigInteger& ob2); //done
+    friend bool operator>=(const BigInteger& ob, int a); //done
+    friend bool operator>=(int a, const BigInteger& ob); //done
+    friend BigInteger min(const BigInteger& a, const BigInteger& b); //done
+
+private:
+    std::vector<unsigned char> m_digit;
+    unsigned char m_sign;
+    unsigned char m_base;
+};
+
+
+#endif // BIGINTEGER_HPP_INCLUDED

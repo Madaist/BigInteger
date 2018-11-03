@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1540737782 source:c:\users\laptop hp\desktop\biginteger\biginteger\main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<string.h>
+
+1540935320 source:g:\biginteger\biginteger\main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<string.h>
+	<stdexcept>
+
+1541256026 source:c:\users\laptop hp\desktop\biginteger v2\biginteger\main.cpp
+	<iostream>
+	"BigInteger.hpp"
+	"BigInteger.cpp"
+
+1541251008 c:\users\laptop hp\desktop\biginteger v2\biginteger\biginteger.hpp
+	<iostream>
+	<vector>
+	<string>
+	<stdexcept>
+
+1541254995 c:\users\laptop hp\desktop\biginteger v2\biginteger\biginteger.cpp
+	<iostream>
+	<vector>
+	<string>
+	<string.h>
+	<stdexcept>
+	<algorithm>
+	<cstdlib>
+	"BigInteger.hpp"
+
