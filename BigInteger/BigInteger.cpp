@@ -67,6 +67,7 @@ BigInteger& BigInteger::operator+=(const BigInteger& ob)
 {
     if(m_base != ob.m_base)
         throw std::runtime_error("Numerele sunt in baze diferite. Nu se pot face operatii.");
+    if(ob == 0) return *this;
 
     int carry = 0, sum, i;
     BigInteger min_number = min(*this, ob);
@@ -161,6 +162,13 @@ BigInteger& BigInteger::operator-=(int a)
 
 BigInteger& BigInteger::operator*=(const BigInteger& ob)
 {
+    if(ob == 0 || *this == 0)
+    {
+        m_digit.clear();
+        m_digit.push_back('0');
+        return *this;
+    }
+
     if(m_sign == ob.m_sign) m_sign = '+';
     else m_sign = '-';
 
@@ -187,15 +195,11 @@ BigInteger& BigInteger::operator*=(const BigInteger& ob)
             result[i_n1 + i_n2] += carry;
         i_n2++;
     }
-    unsigned int i = 0;
-    while (i < result.size() && result[i] == 0)
-        i++;
-
-    if (i == result.size())
+    int i = result.size()-1;
+    while(result.at(i) == 0)
     {
-        m_digit.clear();
-        m_digit.push_back('0');
-        return *this;
+        result.pop_back();
+        i--;
     }
 
     m_digit.clear();
@@ -207,12 +211,18 @@ BigInteger& BigInteger::operator*=(const BigInteger& ob)
 
 BigInteger& BigInteger::operator*=(int a)
 {
+    if(a == 0 || *this == 0)
+    {
+        m_digit.clear();
+        m_digit.push_back('0');
+        return *this;
+    }
+
     BigInteger temp;
     temp.m_digit.clear();
     if( a >= 0 )
         temp.m_sign = '+';
     else temp.m_sign = '-';
-    if(a == 0) temp.m_digit.push_back('0');
     if(a < 0 ) a = std::abs(a);
     while(a != 0)
     {
@@ -228,28 +238,19 @@ BigInteger& BigInteger::operator/=(int a)
     if(a == 0)
         throw std::runtime_error("Impartire la 0.");
 
-    int divisor = a;
-    BigInteger big_a;
-    big_a.m_digit.clear();
-    if( a > 0 )
-        big_a.m_sign = '+';
-    else big_a.m_sign = '-';
-    if(a < 0 ) a = std::abs(a);
-    while(a != 0)
-    {
-        big_a.m_digit.push_back((a % 10) + '0');
-        a = a / 10;
-    }
-    if(big_a > *this)
+    if( *this < a)
     {
         m_digit.clear();
         m_digit.push_back('0');
         return *this;
     }
 
-    if(m_sign == big_a.m_sign)
-        m_sign = '+';
+    char a_sign = '+';
+    if( a < 0) a_sign = '-';
+    if(m_sign == a_sign) m_sign = '+';
     else m_sign = '-';
+    int divisor = std::abs(a);
+
 
     std::vector<unsigned char> result;
     unsigned int idx = m_digit.size()-1;
@@ -265,6 +266,54 @@ BigInteger& BigInteger::operator/=(int a)
     m_digit.clear();
     std::reverse(result.begin(),result.end());
     m_digit = result;
+    return *this;
+}
+
+BigInteger& BigInteger::operator/=(const BigInteger& ob)
+{
+    if(ob == 0)
+        throw std::runtime_error("Impartire la 0.");
+    if(*this < ob)
+    {
+        std::cout<<"mai mic";
+        m_digit.clear();
+        m_digit.push_back('0');
+        return *this;
+    }
+    if(m_sign == ob.m_sign) m_sign = '+';
+    else m_sign = '-';
+    BigInteger result, temp;
+    result.m_digit.clear();
+    result.m_sign = m_sign;
+    temp.m_digit.clear();
+    int idx = m_digit.size()-1;
+
+    temp.m_digit.push_back(m_digit[idx]); //in temp iau pe rand cifrele din deimpartit
+    while(temp < ob) //ob este impartitorul
+    {
+        std::cout<<"intra in while\n";
+        idx--;
+        temp.m_digit.push_back(m_digit[idx]);
+    }
+    int quotient, i;
+    BigInteger rest;
+    rest.m_digit.clear();
+    while(idx >= 0)
+    {
+        idx--;
+        for( i = 0; i <= 9; i++)
+        {
+            BigInteger x = ob*i;
+            if(x == temp){  quotient = i;  break;  }
+            if(temp < x){   quotient = i-1; break; }
+        }
+        result.m_digit.push_back(quotient + '0');
+        rest = temp - (ob * quotient);
+        rest *= 10;
+        if(idx >= 0)
+            temp = rest + m_digit[idx];
+    }
+    *this = result;
     return *this;
 }
 
@@ -406,6 +455,13 @@ BigInteger operator/(const BigInteger& ob, int a)
     return temp;
 }
 
+BigInteger operator/(const BigInteger& ob1, const BigInteger& ob2)
+{
+    BigInteger temp(ob1);
+    temp /= ob2;
+    return temp;
+}
+
 BigInteger operator^(const BigInteger& ob, int a)
 {
     BigInteger temp;
@@ -429,7 +485,7 @@ BigInteger operator^(const BigInteger& ob, int a)
 
 bool operator==(const BigInteger& ob1, const BigInteger& ob2)
 {
-    if(ob1.m_sign != ob2.m_sign || ob1.m_digit.size() != ob2.m_digit.size())
+    if((ob1.m_sign != ob2.m_sign) || (ob1.m_digit.size() != ob2.m_digit.size()))
         return false;
     for(unsigned int i = 0; i < ob1.m_digit.size(); i++)
         if(ob1.m_digit[i] != ob2.m_digit[i])
@@ -446,6 +502,7 @@ bool operator==(const BigInteger& ob, int a)
         b = b/10;
         counter++;
     }
+    if(a == 0) counter = 1;
     if(counter != ob.m_digit.size())
         return false;
     for(unsigned int i = 0; i < counter; i++)
@@ -466,6 +523,7 @@ bool operator==(int a, const BigInteger& ob)
         b = b/10;
         counter++;
     }
+    if(a == 0) counter = 1;
     if(counter != ob.m_digit.size())
         return false;
     for(unsigned int i = 0; i < counter; i++)
@@ -477,7 +535,7 @@ bool operator==(int a, const BigInteger& ob)
     return true;
 }
 
-bool operator!=(const BigInteger& ob1, const BigInteger& ob2)
+bool operator!= (const BigInteger& ob1, const BigInteger& ob2)
 {
     if(ob1 == ob2)
         return false;
@@ -500,18 +558,24 @@ bool operator!=(int a, const BigInteger& ob)
 
 bool operator<(const BigInteger& ob1, const BigInteger& ob2)
 {
-    if(ob1.m_digit.size() < ob2.m_digit.size() || (ob1.m_sign == '-' && ob2.m_sign == '+'))
+    if((ob1.m_sign == '-' && ob2.m_sign == '+') || (ob1.m_digit.size() < ob2.m_digit.size()))
         return true;
     if(ob1.m_sign == '+' && ob2.m_sign == '-')
         return false;
-    for(unsigned int i = ob1.m_digit.size()-1; i >= 0; i--)
-        if(ob1.m_digit[i] >= ob2.m_digit[i])
+    if(ob1 == ob2) return false;
+    for( int i = ob1.m_digit.size()-1; i >= 0; i--)
+    {
+        if(ob1.m_digit[i] > ob2.m_digit[i])
             return false;
+        if(ob1.m_digit[i] < ob2.m_digit[i])
+            return true;
+    }
     return true;
 }
 
 bool operator<(const BigInteger& ob, int a)
 {
+    if(ob == a) return false;
     int b = a;
     unsigned int counter = 0;
     while(b != 0)
@@ -523,7 +587,7 @@ bool operator<(const BigInteger& ob, int a)
         return false;
     for(unsigned int i = 0; i < counter; i++)
     {
-        if(ob.m_digit[i]-'0' >=  a%10)
+        if(ob.m_digit[i]-'0' >  a%10)
             return false;
         a = a/10;
     }
@@ -539,30 +603,36 @@ bool operator<(int a, const BigInteger& ob)
         b = b/10;
         counter++;
     }
-    if(counter >= ob.m_digit.size())
+    if(counter > ob.m_digit.size())
         return false;
+    if(ob == a) return false;
     for(unsigned int i = 0; i < counter; i++)
     {
-        if(ob.m_digit[i]-'0' <=  a%10)
+        if(ob.m_digit[i]-'0' <  a%10)
             return false;
         a = a/10;
     }
     return true;
 }
 
-bool operator>(const BigInteger& ob1, const BigInteger& ob2)
+bool operator> (const BigInteger& ob1, const BigInteger& ob2)
 {
-    if(ob1.m_digit.size() > ob2.m_digit.size() || (ob1.m_sign == '+' && ob2.m_sign == '-'))
+    if((ob1.m_sign == '+' && ob2.m_sign == '-') || (ob1.m_digit.size() > ob2.m_digit.size()))
         return true;
     if(ob1.m_sign == '-' && ob2.m_sign == '+')
         return false;
-    for(unsigned int i = ob1.m_digit.size()-1; i >= 0; i--)
-        if(ob1.m_digit[i] <= ob2.m_digit[i])
+    if(ob1 == ob2) return false;
+    for(int i = ob1.m_digit.size()-1; i >= 0; i--)
+    {
+        if(ob1.m_digit[i] < ob2.m_digit[i])
             return false;
+        if(ob1.m_digit[i] > ob2.m_digit[i])
+            return true;
+    }
     return true;
 }
 
-bool operator>(const BigInteger& ob, int a)
+bool operator> (const BigInteger& ob, int a)
 {
     int b = a;
     unsigned int counter = 0;
@@ -571,18 +641,19 @@ bool operator>(const BigInteger& ob, int a)
         b = b/10;
         counter++;
     }
-    if(counter >= ob.m_digit.size())
+    if(counter > ob.m_digit.size())
         return false;
+    if(ob == a) return false;
     for(unsigned int i = 0; i < counter; i++)
     {
-        if(ob.m_digit[i]-'0' <=  a%10)
+        if(ob.m_digit[i]-'0' <  a%10)
             return false;
         a = a/10;
     }
     return true;
 }
 
-bool operator>(int a, const BigInteger& ob)
+bool operator> (int a, const BigInteger& ob)
 {
     int b = a;
     unsigned int counter = 0;
@@ -593,23 +664,24 @@ bool operator>(int a, const BigInteger& ob)
     }
     if(counter <= ob.m_digit.size())
         return false;
+    if(b == a) return false;
     for(unsigned int i = 0; i < counter; i++)
     {
-        if(ob.m_digit[i]-'0' >=  a%10)
+        if(ob.m_digit[i]-'0' >  a%10)
             return false;
         a = a/10;
     }
     return true;
 }
 
-bool operator<=(const BigInteger& ob1, const BigInteger& ob2)
+bool operator<= (const BigInteger& ob1, const BigInteger& ob2)
 {
     if(ob1 < ob2 || ob1 == ob2)
         return true;
     return false;
 }
 
-bool operator<=(const BigInteger& ob, int a)
+bool operator<= (const BigInteger& ob, int a)
 {
     if(ob < a || ob == a)
         return true;
@@ -680,7 +752,7 @@ std::istream& operator>>(std::istream& stream, BigInteger& ob)
 
 std::ostream& operator<<(std::ostream& stream, BigInteger& ob)
 {
-    if(ob.m_digit.size() == 1 && ob.m_digit[0] == '0')
+    if(ob.m_digit.size()==1 && ob.m_digit[0] == '0') //de modificat
     {
         stream << "Numarul este: 0, in baza "<<(int)ob.m_base <<"\n";
         return stream;

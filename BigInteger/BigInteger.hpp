@@ -24,7 +24,7 @@ public:
     BigInteger& operator*=(const BigInteger& ob);
     BigInteger& operator*=(int a);
 
-    BigInteger& operator/=(BigInteger ob);
+    BigInteger& operator/=(const BigInteger& ob);
     BigInteger& operator/=(int a);
 
     BigInteger& operator%=(BigInteger ob);
