@@ -316,12 +316,14 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
                 break;
             }
         }
+        std::cout<<"quotient is "<<quotient<<'\n';
         result.m_digit.push_back(quotient + '0');
         rest = temp - (ob * quotient);
         rest *= 10;
         if(idx >= 0)
             temp = rest + (m_digit.at(idx)-'0');
     }
+    std::reverse(result.m_digit.begin(), result.m_digit.end());
     *this = result;
     return *this;
 }
