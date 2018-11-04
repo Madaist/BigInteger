@@ -290,8 +290,8 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
     temp.m_digit.clear();
     int idx = m_digit.size()-1;
 
-    temp.m_digit.push_back(m_digit[idx]); //in temp iau pe rand cifrele din deimpartit
-    while(temp < ob) //ob este impartitorul
+    temp.m_digit.push_back(m_digit[idx]);
+    while(temp < ob)
     {
         idx--;
         temp.m_digit.push_back(m_digit[idx]);
@@ -310,7 +310,7 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
                 quotient = i;
                 break;
             }
-            if(temp < x)
+            if(x > temp)
             {
                 quotient = i-1;
                 break;
@@ -320,7 +320,7 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
         rest = temp - (ob * quotient);
         rest *= 10;
         if(idx >= 0)
-            temp = rest + m_digit[idx];
+            temp = rest + (m_digit.at(idx)-'0');
     }
     *this = result;
     return *this;
