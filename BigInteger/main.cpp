@@ -4,9 +4,9 @@
 
 int main()
 {
-    BigInteger ob1(80), ob2(4), ob3("-123456789"), ob4(123456789);
-    ob1 /= ob2;
-    std::cout<<ob1;
+    BigInteger ob1(12345), ob2(4), ob3("-123456789"), ob4(123456789);
+    ob3 = ob1 % 10;
+    std::cout<<ob3;
     /*BigInteger ob5 = ob1 + ob2;
 	std::cout << "ob1 + ob2 --> " << ob5;
 	ob5 = ob1 - ob2;

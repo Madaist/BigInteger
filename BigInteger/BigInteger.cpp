@@ -326,6 +326,31 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
     return *this;
 }
 
+BigInteger& BigInteger::operator%=(int a)
+{
+    if(a == 0)
+        throw std::runtime_error("Impartire la 0.");
+    if(a < 0) a = std::abs(a);
+    int result = 0;
+    for(auto i = m_digit.rbegin(); i != m_digit.rend(); ++i)
+    {
+        result = (result * 10 + (*i-'0')) % a;
+        std::cout<<"result = "<<result<<'\n';
+    }
+    m_digit.clear();
+    if(result == 0)
+    {
+        m_digit.push_back('0');
+        return *this;
+    }
+    while(result != 0)
+    {
+        m_digit.push_back(result%10+'0');
+        result /= 10;
+    }
+    return *this;
+}
+
 BigInteger operator+(const BigInteger& ob)
 {
     return ob;
@@ -490,6 +515,13 @@ BigInteger operator^(const BigInteger& ob, int a)
         temp *= ob;
     return temp;
 
+}
+
+BigInteger operator%(const BigInteger& ob, int a)
+{
+    BigInteger temp(ob);
+    temp %= a;
+    return temp;
 }
 
 bool operator==(const BigInteger& ob1, const BigInteger& ob2)
