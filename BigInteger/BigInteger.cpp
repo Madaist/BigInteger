@@ -333,10 +333,7 @@ BigInteger& BigInteger::operator%=(int a)
     if(a < 0) a = std::abs(a);
     int result = 0;
     for(auto i = m_digit.rbegin(); i != m_digit.rend(); ++i)
-    {
         result = (result * 10 + (*i-'0')) % a;
-        std::cout<<"result = "<<result<<'\n';
-    }
     m_digit.clear();
     if(result == 0)
     {
