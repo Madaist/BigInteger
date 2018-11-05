@@ -136,6 +136,12 @@ BigInteger& BigInteger::operator+=(const BigInteger& ob)
                 carry = 0;
             m_digit.push_back(diff + '0');
         }
+        while(m_digit.size() > 1)
+        {
+            if(m_digit[m_digit.size()-1] == '0')
+                m_digit.pop_back();
+            else break;
+        }
     }
     return *this;
 }
@@ -290,7 +296,8 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
     if(ob == 0)
         throw std::runtime_error("Impartire la 0.");
 
-    if(*this < ob)
+    BigInteger min_number = min(*this, ob);
+    if(min_number == *this)
     {
         m_digit.clear();
         m_digit.push_back('0');
@@ -300,14 +307,15 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
     if(m_sign == ob.m_sign) m_sign = '+';
     else m_sign = '-';
 
-    BigInteger result, temp;
+    BigInteger result, temp, divisor = ob;
     result.m_digit.clear();
     result.m_sign = m_sign;
     temp.m_digit.clear();
+    divisor.m_sign = '+';
 
     int idx = m_digit.size()-1;
     temp.m_digit.push_back(m_digit[idx]);
-    while(temp < ob && idx > 0)
+    while(temp < divisor && idx > 0)
     {
         idx--;
         temp.m_digit.push_back(m_digit[idx]);
@@ -321,7 +329,7 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
         idx--;
         for( i = 0; i <= 9; i++)
         {
-            BigInteger x = ob*i;
+            BigInteger x = divisor*i;
             if(x == temp)
             {
                 quotient = i;
@@ -335,7 +343,7 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
         }
         result.m_digit.push_back(quotient + '0');
         if(idx == -1) break;
-        remainder = temp - (ob * quotient);
+        remainder = temp - (divisor * quotient);
         for(int i = remainder.m_digit.size()-1; i > 0; i--)
         {
             if(remainder.m_digit.at(i) == '0')

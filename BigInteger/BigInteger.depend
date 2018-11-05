@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1541453803 source:c:\users\laptop hp\desktop\biginteger v2\biginteger\main.cpp
+1541457075 source:c:\users\laptop hp\desktop\biginteger v2\biginteger\main.cpp
 	<iostream>
 	"BigInteger.hpp"
 	"BigInteger.cpp"
@@ -10,7 +10,7 @@
 	<string>
 	<stdexcept>
 
-1541454032 c:\users\laptop hp\desktop\biginteger v2\biginteger\biginteger.cpp
+1541457281 c:\users\laptop hp\desktop\biginteger v2\biginteger\biginteger.cpp
 	<iostream>
 	<vector>
 	<string>

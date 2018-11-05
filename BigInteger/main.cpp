@@ -21,7 +21,7 @@ int main()
     try
     {
         ob2 %= 5;
-        std::cout<<"ob2 %= ob5 --> "<<ob2;
+        std::cout<<"ob2 %= 5 --> "<<ob2;
     }
     catch(std::runtime_error& e)
     {
