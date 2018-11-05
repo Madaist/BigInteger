@@ -56,7 +56,7 @@ public:
 
     friend BigInteger operator%(const BigInteger& ob1, const BigInteger& ob2);
     friend BigInteger operator%(const BigInteger& ob, int a);
-    friend BigInteger operator%(int a, BigInteger ob);
+    friend BigInteger operator%(int a, const BigInteger& ob);
 
     friend bool operator==(const BigInteger& ob1, const BigInteger& ob2);
     friend bool operator==(const BigInteger& ob, int a);

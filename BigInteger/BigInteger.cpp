@@ -275,30 +275,33 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
 {
     if(ob == 0)
         throw std::runtime_error("Impartire la 0.");
+
     if(*this < ob)
     {
-        std::cout<<"mai mic";
         m_digit.clear();
         m_digit.push_back('0');
         return *this;
     }
+
     if(m_sign == ob.m_sign) m_sign = '+';
     else m_sign = '-';
+
     BigInteger result, temp;
     result.m_digit.clear();
     result.m_sign = m_sign;
     temp.m_digit.clear();
-    int idx = m_digit.size()-1;
 
+    int idx = m_digit.size()-1;
     temp.m_digit.push_back(m_digit[idx]);
-    while(temp < ob)
+    while(temp < ob && idx > 0)
     {
         idx--;
         temp.m_digit.push_back(m_digit[idx]);
     }
+    std::reverse(temp.m_digit.begin(), temp.m_digit.end());
+
     int quotient, i;
-    BigInteger rest;
-    rest.m_digit.clear();
+    BigInteger remainder;
     while(idx >= 0)
     {
         idx--;
@@ -316,12 +319,25 @@ BigInteger& BigInteger::operator/=(const BigInteger& ob)
                 break;
             }
         }
-        std::cout<<"quotient is "<<quotient<<'\n';
         result.m_digit.push_back(quotient + '0');
-        rest = temp - (ob * quotient);
-        rest *= 10;
-        if(idx >= 0)
-            temp = rest + (m_digit.at(idx)-'0');
+        if(idx == -1) break;
+        remainder = temp - (ob * quotient);
+        for(int i = remainder.m_digit.size()-1; i > 0; i--)
+        {
+            if(remainder.m_digit.at(i) == '0')
+                remainder.m_digit.pop_back();
+            else break;
+        }
+        if(remainder == 0)
+        {
+            temp.m_digit.clear();
+            temp.m_digit.push_back(m_digit[idx]);
+        }
+        if(remainder != 0)
+        {
+            remainder *= 10;
+            temp = remainder + (m_digit.at(idx)-'0');
+        }
     }
     std::reverse(result.m_digit.begin(), result.m_digit.end());
     *this = result;
@@ -332,10 +348,12 @@ BigInteger& BigInteger::operator%=(int a)
 {
     if(a == 0)
         throw std::runtime_error("Impartire la 0.");
+
     if(a < 0) a = std::abs(a);
     int result = 0;
     for(auto i = m_digit.rbegin(); i != m_digit.rend(); ++i)
         result = (result * 10 + (*i-'0')) % a;
+
     m_digit.clear();
     if(result == 0)
     {
@@ -349,6 +367,15 @@ BigInteger& BigInteger::operator%=(int a)
     }
     return *this;
 }
+
+BigInteger& BigInteger::operator%= (BigInteger ob)
+{
+    BigInteger quotient = *this/ob;
+    BigInteger x = quotient*ob;
+    *this = *this - x;
+    return *this;
+}
+
 
 BigInteger operator+(const BigInteger& ob)
 {
@@ -521,6 +548,13 @@ BigInteger operator%(const BigInteger& ob, int a)
     BigInteger temp(ob);
     temp %= a;
     return temp;
+}
+BigInteger operator%(int a, const BigInteger& ob)
+{
+    BigInteger quotient = a/ob;
+    BigInteger x = quotient*ob;
+    BigInteger result = a - x;
+    return result;
 }
 
 bool operator==(const BigInteger& ob1, const BigInteger& ob2)
@@ -774,7 +808,7 @@ BigInteger min(const BigInteger& a, const BigInteger& b)
         return a;
     if(b.m_digit.size() < a.m_digit.size())
         return b;
-    for(unsigned int i = a.m_digit.size() - 1; i >= 0; i--)
+    for(int i = a.m_digit.size() - 1; i >= 0; i--)
         if(a.m_digit[i] < b.m_digit[i])
             return a;
     return b;
