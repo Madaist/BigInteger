@@ -8,9 +8,9 @@
 class BigInteger
 {
 public:
-    BigInteger(std::string digits, unsigned char base = 10);
     BigInteger(int number = 0, unsigned char base = 10);
     BigInteger(long long int number, unsigned char base = 10);
+    BigInteger(const std::string& digits, unsigned char base = 10);
 
     unsigned char get_base() const;
     unsigned char get_sign() const;
@@ -27,7 +27,7 @@ public:
     BigInteger& operator/=(const BigInteger& ob);
     BigInteger& operator/=(int a);
 
-    BigInteger& operator%=(BigInteger ob);
+    BigInteger& operator%=(const BigInteger& ob);
     BigInteger& operator%=(int a);
 
     friend std::istream& operator>>(std::istream& stream, BigInteger& ob);

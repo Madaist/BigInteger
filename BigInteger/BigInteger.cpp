@@ -7,33 +7,20 @@
 #include<cstdlib>
 #include "BigInteger.hpp"
 
-BigInteger::BigInteger(std::string digits, unsigned char base)
-    : m_base(base)
-{
-    if(digits[0] == '-') m_sign = '-';
-    else if(digits[0] == '+')  m_sign = '+';
-    else throw std::runtime_error
-        ("Prima pozitie a string-ului trebuie sa fie reprezentata de semn (+ sau -).");
-
-    for(int i = digits.length()-1; i >= 1; i--)
-    {
-        if(strchr("0123456789", digits[i])==NULL)
-            throw std::runtime_error("String-ul nu reprezinta un numar");
-        m_digit.push_back(digits[i]);
-    }
-}
-
 BigInteger::BigInteger(int number, unsigned char base)
     : m_base(base)
 {
-    if(number >= 0) m_sign = '+';
-    else m_sign = '-';
-    if(number == 0) m_digit.push_back('0');
+    if(number >= 0)
+        m_sign = '+';
+    else
+        m_sign = '-';
+    if(number == 0)
+        m_digit.push_back('0');
 
     number = std::abs(number);
     while(number != 0)
     {
-        int a = number %10;
+        int a = number % 10;
         m_digit.push_back(a + '0');
         number /= 10;
     }
@@ -42,9 +29,12 @@ BigInteger::BigInteger(int number, unsigned char base)
 BigInteger::BigInteger(long long int number, unsigned char base)
     : m_base(base)
 {
-    if(number >= 0) m_sign = '+';
-    else m_sign = '-';
-    if(number == 0) m_digit.push_back('0');
+    if(number >= 0)
+        m_sign = '+';
+    else
+        m_sign = '-';
+    if(number == 0)
+        m_digit.push_back('0');
 
     number = std::abs(number);
     while(number != 0)
@@ -52,6 +42,24 @@ BigInteger::BigInteger(long long int number, unsigned char base)
         int a = number %10;
         m_digit.push_back(a + '0');
         number /= 10;
+    }
+}
+
+BigInteger::BigInteger(const std::string& digits, unsigned char base)
+    : m_base(base)
+{
+    if(digits[0] == '-')
+        m_sign = '-';
+    else if(digits[0] == '+')
+        m_sign = '+';
+    else throw std::runtime_error
+        ("Prima pozitie a string-ului trebuie sa fie reprezentata de semn (+ sau -).");
+
+    for(int i = digits.length()-1; i >= 1; i--)
+    {
+        if(strchr("0123456789", digits[i])==NULL)
+            throw std::runtime_error("String-ul nu reprezinta un numar");
+        m_digit.push_back(digits[i]);
     }
 }
 
@@ -138,9 +146,12 @@ BigInteger& BigInteger::operator+=(int a)
     temp.m_digit.clear();
     if( a >= 0 )
         temp.m_sign = '+';
-    else temp.m_sign = '-';
-    if(a == 0) temp.m_digit.push_back('0');
-    if(a < 0 ) a = std::abs(a);
+    else
+        temp.m_sign = '-';
+    if(a == 0)
+        temp.m_digit.push_back('0');
+    if(a < 0 )
+        a = std::abs(a);
     while(a != 0)
     {
         temp.m_digit.push_back((a % 10) + '0');
@@ -171,8 +182,10 @@ BigInteger& BigInteger::operator*=(const BigInteger& ob)
         return *this;
     }
 
-    if(m_sign == ob.m_sign) m_sign = '+';
-    else m_sign = '-';
+    if(m_sign == ob.m_sign)
+        m_sign = '+';
+    else
+        m_sign = '-';
 
     int size1 = m_digit.size();
     int size2 = ob.m_digit.size();
@@ -224,8 +237,10 @@ BigInteger& BigInteger::operator*=(int a)
     temp.m_digit.clear();
     if( a >= 0 )
         temp.m_sign = '+';
-    else temp.m_sign = '-';
-    if(a < 0 ) a = std::abs(a);
+    else
+        temp.m_sign = '-';
+    if(a < 0 )
+        a = std::abs(a);
     while(a != 0)
     {
         temp.m_digit.push_back((a % 10) + '0');
@@ -252,7 +267,6 @@ BigInteger& BigInteger::operator/=(int a)
     if(m_sign == a_sign) m_sign = '+';
     else m_sign = '-';
     int divisor = std::abs(a);
-
 
     std::vector<unsigned char> result;
     unsigned int idx = m_digit.size()-1;
@@ -368,7 +382,7 @@ BigInteger& BigInteger::operator%=(int a)
     return *this;
 }
 
-BigInteger& BigInteger::operator%= (BigInteger ob)
+BigInteger& BigInteger::operator%= (const BigInteger& ob)
 {
     BigInteger quotient = *this/ob;
     BigInteger x = quotient*ob;
@@ -431,11 +445,15 @@ BigInteger operator-(int a, const BigInteger& ob)
     BigInteger temp, result;
     temp.m_digit.clear();
     result.m_digit.clear();
+
     if( a >= 0 )
         temp.m_sign = '+';
-    else temp.m_sign = '-';
-    if(a == 0) temp.m_digit.push_back('0');
-    if(a < 0 ) a = std::abs(a);
+    else
+        temp.m_sign = '-';
+    if(a == 0)
+        temp.m_digit.push_back('0');
+    if(a < 0 )
+        a = std::abs(a);
     while(a != 0)
     {
         temp.m_digit.push_back((a % 10) + '0');
@@ -466,7 +484,7 @@ BigInteger operator*(int a, const BigInteger& ob)
     return temp;
 }
 
-BigInteger operator/(int a, const BigInteger& ob)
+BigInteger operator/ (int a, const BigInteger& ob)
 {
     int ok = 0;
     for (auto i = ob.m_digit.rbegin(); i != ob.m_digit.rend(); ++i)
@@ -495,11 +513,16 @@ BigInteger operator/(int a, const BigInteger& ob)
         digit += *i;
     int x = atoi(digit.c_str());
     int result = a / x;
+
     if( (a >= 0 && ob.m_sign == '+') || (a <= 0 && ob.m_sign == '-'))
         temp.m_sign = '+';
-    else temp.m_sign = '-';
-    if(result == 0) temp.m_digit.push_back('0');
-    if(result < 0 ) result = std::abs(result);
+    else
+        temp.m_sign = '-';
+
+    if(result == 0)
+        temp.m_digit.push_back('0');
+    if(result < 0 )
+        result = std::abs(result);
     while(result != 0)
     {
         temp.m_digit.push_back((result % 10) + '0');
@@ -508,39 +531,41 @@ BigInteger operator/(int a, const BigInteger& ob)
     return temp;
 }
 
-BigInteger operator/(const BigInteger& ob, int a)
+BigInteger operator/ (const BigInteger& ob, int a)
 {
     BigInteger temp(ob);
     temp /= a;
     return temp;
 }
 
-BigInteger operator/(const BigInteger& ob1, const BigInteger& ob2)
+BigInteger operator/ (const BigInteger& ob1, const BigInteger& ob2)
 {
     BigInteger temp(ob1);
     temp /= ob2;
     return temp;
 }
 
-BigInteger operator^(const BigInteger& ob, int a)
+BigInteger operator^ (const BigInteger& ob, int a)
 {
     BigInteger temp;
     temp.m_digit.clear();
+
     if( a == 0)
     {
         temp.m_digit.push_back('1');
         return temp;
     }
+
     if(a < 0)
     {
         temp.m_digit.push_back('0');
         return temp;
     }
+
     temp = ob;
     for(int i = 1; i < a; i++)
         temp *= ob;
     return temp;
-
 }
 
 BigInteger operator%(const BigInteger& ob, int a)
@@ -590,23 +615,9 @@ bool operator==(const BigInteger& ob, int a)
 
 bool operator==(int a, const BigInteger& ob)
 {
-    int b = a;
-    unsigned int counter = 0;
-    while(b != 0)
-    {
-        b = b/10;
-        counter++;
-    }
-    if(a == 0) counter = 1;
-    if(counter != ob.m_digit.size())
-        return false;
-    for(unsigned int i = 0; i < counter; i++)
-    {
-        if(ob.m_digit[i]-'0' !=  a%10)
-            return false;
-        a = a/10;
-    }
-    return true;
+    if(ob == a)
+        return true;
+    return false;
 }
 
 bool operator!= (const BigInteger& ob1, const BigInteger& ob2)
@@ -637,6 +648,7 @@ bool operator<(const BigInteger& ob1, const BigInteger& ob2)
     if((ob1.m_sign == '+' && ob2.m_sign == '-') || (ob1.m_digit.size() > ob2.m_digit.size()))
         return false;
     if(ob1 == ob2) return false;
+
     for( int i = ob1.m_digit.size()-1; i >= 0; i--)
     {
         if(ob1.m_digit[i] > ob2.m_digit[i])
@@ -649,7 +661,9 @@ bool operator<(const BigInteger& ob1, const BigInteger& ob2)
 
 bool operator< (const BigInteger& ob, int a)
 {
-    if(ob == a) return false;
+    if(ob == a)
+        return false;
+
     int b = a;
     unsigned int counter = 0;
     while(b != 0)
@@ -657,9 +671,11 @@ bool operator< (const BigInteger& ob, int a)
         b = b/10;
         counter++;
     }
+
     if(a == 0) counter = 1;
     if(ob.m_digit.size() > counter)
         return false;
+
     for(unsigned int i = 0; i < counter; i++)
     {
         if((ob.m_digit[i]-'0') >  a%10)
@@ -680,10 +696,12 @@ bool operator<(int a, const BigInteger& ob)
         b = b/10;
         counter++;
     }
-    if(a == 0) counter = 1;
+    if(a == 0)
+        counter = 1;
     if(counter > ob.m_digit.size())
         return false;
-    if(ob == a) return false;
+    if(ob == a)
+        return false;
     for(unsigned int i = 0; i < counter; i++)
     {
         if(ob.m_digit[i]-'0' <  a%10)
@@ -697,66 +715,22 @@ bool operator<(int a, const BigInteger& ob)
 
 bool operator> (const BigInteger& ob1, const BigInteger& ob2)
 {
-    if((ob1.m_sign == '+' && ob2.m_sign == '-') || (ob1.m_digit.size() > ob2.m_digit.size()))
-        return true;
-    if((ob1.m_sign == '-' && ob2.m_sign == '+') || (ob1.m_digit.size() < ob2.m_digit.size()))
+    if((ob1 < ob2) || (ob1 == ob2))
         return false;
-    if(ob1 == ob2) return false;
-    for(int i = ob1.m_digit.size()-1; i >= 0; i--)
-    {
-        if(ob1.m_digit[i] < ob2.m_digit[i])
-            return false;
-        if(ob1.m_digit[i] > ob2.m_digit[i])
-            return true;
-    }
     return true;
 }
 
 bool operator> (const BigInteger& ob, int a)
 {
-    int b = a;
-    unsigned int counter = 0;
-    while(b != 0)
-    {
-        b = b/10;
-        counter++;
-    }
-    if(a == 0) counter = 1;
-    if(counter > ob.m_digit.size())
+    if((ob < a) || (ob == a))
         return false;
-    if(ob == a) return false;
-    for(unsigned int i = 0; i < counter; i++)
-    {
-        if(ob.m_digit[i]-'0' <  a%10)
-            return false;
-        else if(ob.m_digit[i]-'0' >  a%10)
-            return true;
-        a = a/10;
-    }
     return true;
 }
 
 bool operator> (int a, const BigInteger& ob)
 {
-    int b = a;
-    unsigned int counter = 0;
-    if(a == 0) counter = 1;
-    while(b != 0)
-    {
-        b = b/10;
-        counter++;
-    }
-    if(counter < ob.m_digit.size())
+    if((a < ob) || (a == ob))
         return false;
-    if(b == a) return false;
-    for(unsigned int i = 0; i < counter; i++)
-    {
-        if(ob.m_digit[i]-'0' >  a%10)
-            return false;
-        else if(ob.m_digit[i]-'0' <  a%10)
-            return true;
-        a = a/10;
-    }
     return true;
 }
 
@@ -838,13 +812,13 @@ std::istream& operator>>(std::istream& stream, BigInteger& ob)
 
 std::ostream& operator<<(std::ostream& stream, BigInteger& ob)
 {
-    if(ob.m_digit.size()==1 && ob.m_digit[0] == '0') //de modificat
+    if(ob.m_digit.size()==1 && ob.m_digit[0] == '0')
     {
         stream << "Numarul este: 0, in baza "<<(int)ob.m_base <<"\n";
         return stream;
     }
     stream << "Numarul este: " << ob.m_sign;
-    std::vector<unsigned char>::reverse_iterator i = ob.m_digit.rbegin();
+    auto i = ob.m_digit.rbegin();
     if(*i != '0')
         stream << *i;
     for(i = ob.m_digit.rbegin()+1; i != ob.m_digit.rend(); ++i)

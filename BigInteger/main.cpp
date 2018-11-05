@@ -4,7 +4,7 @@
 
 int main()
 {
-    BigInteger ob1(39), ob2(3), ob3, ob4(123456789);
+    BigInteger ob1(124), ob2(12), ob3, ob4("-123456789");
     std::cout<<"ob1 --> "<<ob1;
     std::cout<<"ob2 --> "<<ob2;
     try
